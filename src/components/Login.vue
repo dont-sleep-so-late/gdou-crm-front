@@ -83,7 +83,7 @@ export default {
 	methods: {
 		getEmailCode() {
 			this.axios({
-				url: "/app/email/send.do",
+				url: "/ship/email/send.do",
 				method: "POST",
 				params: {
 					username: this.FormData.username,
@@ -123,7 +123,7 @@ export default {
 			this.$refs.FormData.validate(async (valid) => {
 				if (valid) {
 					this.axios({
-						url: "/app/account/login.do",
+						url: "/ship/account/login.do",
 						method: "POST",
 						//传参  /account/getLogin.do?username=...&pwd=...&captcha=...
 						params: {
