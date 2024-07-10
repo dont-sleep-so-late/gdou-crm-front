@@ -14,8 +14,7 @@
 					</el-form-item>
 					<el-form-item>
 						<el-select placeholder="请选择部门" v-model="searchFormData.deptName">
-							<el-option label="请选择部门"
-								value=""></el-option>
+							<el-option label="取消" value=""></el-option>
 							<el-option v-for="(item,index) in deptList" :label="item.name"
 								:value="item.name"></el-option>
 						</el-select>
@@ -69,11 +68,13 @@
 			layout="total,sizes,prev,pager,next,jumper">
 		</el-pagination>
 	</div>
-</template>
 
+</template>
 <script>
 	export default {
 		name: "GetSearchs",
+		components: {},
+		props: {},
 		data() {
 			return {
 				//客户信息列表
@@ -126,7 +127,7 @@
 			//在客户管理功能里面调用部门管理的接口
 			getAllDepts: function() {
 				axios({
-					url: "/app/dept/getAllDepts.do",
+					url: "/ship/dept/getAllDepts.do",
 					method: "POST",
 					params: {
 						// pageNum: this.pageNum,
@@ -173,7 +174,7 @@
 			//多条件搜索
 			searchUsers: function() {
 				axios({
-					url: "/app/user/getUsersBySearch.do",
+					url: "/ship/user/getUsersBySearch.do",
 					method: "POST",
 					//params里面没有传递pageNum和pageSize
 					params: this.searchFormData
@@ -197,6 +198,5 @@
 		}
 	}
 </script>
-
 <style scoped>
 </style>

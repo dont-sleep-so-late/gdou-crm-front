@@ -7,6 +7,39 @@
 				<el-button type="danger" icon="el-icon-delete" size="small" @click="delMany">批量删除</el-button>
 			</el-col>
 		</el-row>
+		<!--顶部菜单：添加、批量删除、搜索-->
+		<el-row type="flex" justify="space-between" style="text-align: center">
+			<el-col :span="20">
+				<el-form :inline="true" size="small">
+					<el-form-item>
+						<el-input v-model="searchFormData.username" prefix-icon="el-icon-user"
+							placeholder="请输入客户姓名"></el-input>
+					</el-form-item>
+					<el-form-item>
+						<el-input v-model="searchFormData.tel" prefix-icon="el-icon-mobile-phone"
+							placeholder="请输入手机号"></el-input>
+					</el-form-item>
+					<el-form-item>
+						<el-select placeholder="请选择部门" v-model="searchFormData.deptName">
+							<el-option v-for="(item,index) in deptList" :label="item.name"
+								:value="item.name"></el-option>
+						</el-select>
+					</el-form-item>
+
+					<el-form-item>
+						<el-radio-group v-model="searchFormData.sex">
+							<el-radio :label="1">男</el-radio>
+							<el-radio :label="0">女</el-radio>
+							<el-radio :label="2">未选</el-radio>
+						</el-radio-group>
+					</el-form-item>
+					<el-form-item>
+						<el-button type="primary" icon="el-icon-search" @click="searchUsers">搜索</el-button>
+					</el-form-item>
+				</el-form>
+			</el-col>
+		</el-row>
+
 		<!--在顶部工具栏和表格之间添加间隙-->
 		<div style="margin: 5px"></div>
 		<!--数据表格展示-->
@@ -159,10 +192,11 @@
 		</el-dialog>
 	</div>
 </template>
-
 <script>
 	export default {
-		name: "",
+		name: "GetUsers",
+		components: {},
+		props: {},
 		data() {
 			return {
 				//客户信息列表
@@ -195,13 +229,13 @@
 				formRules: {
 					username: [{
 							required: true,
-							message: "职员姓名必须填写!",
+							message: "客户姓名必须填写!",
 							trigger: "blur"
 						},
 						{
 							min: 2,
 							max: 10,
-							message: "职员姓名为2-10位的简体中文!",
+							message: "客户姓名为2-10位的简体中文!",
 							trigger: "blur"
 						}
 					],
@@ -229,7 +263,7 @@
 					],
 					profession: [{
 						required: true,
-						message: "岗位必须填写!",
+						message: "职业必须填写!",
 						trigger: "change"
 					}],
 					sal: [{
@@ -271,7 +305,17 @@
 					address: undefined,
 					remark: undefined,
 					deptId: undefined
+				},
+				//搜索模块的数据
+				searchFormData: {
+					username: undefined,
+					tel: undefined,
+					deptName: undefined,
+					sex: 2,
+					pageNum: 1,
+					pageSize: 10
 				}
+
 			}
 		},
 		//生命周期函数  created最先获取到data和methods里面的值的  mounted
@@ -281,37 +325,38 @@
 			//查询所有部门记录
 			this.getAllDepts();
 		},
-		watch:{
-			$route(){
-				this.pageNum=1;
-				this.pageSize=10;
-				this.getUsersByPage();
+		watch: {
+			$route() {
+				this.pageNum = 1;
+				this.pageSize = 10;
+				this.getAccountsByPage();
 			}
 		},
 		methods: {
 			//方法调用方法
 			getUsersByPage: function() {
-				this.axios({
-					url: "/app/user/getUsersByPage.do",
-					method: "POST",
-					params: {
-						pageNum: this.pageNum,
-						pageSize: this.pageSize
-					}
-				}).then((result) => {
-					this.userList = result.data.data;
-					this.total = result.data.total;
-				})
+				// axios({
+				// 	url: "/ship/user/getUsersByPage.do",
+				// 	method: "POST",
+				// 	params: {
+				// 		pageNum: this.pageNum,
+				// 		pageSize: this.pageSize
+				// 	}
+				// }).then((result) => {
+				// 	this.userList = result.data.data;
+				// 	this.total = result.data.total;
+				// })
+				this.searchUsers();
 			},
 			//查询部门记录
 			//在客户管理功能里面调用部门管理的接口
 			getAllDepts: function() {
 				axios({
-					url: "/app/dept/getAllDepts.do",
+					url: "/ship/dept/getAllDepts.do",
 					method: "POST",
-					params: { //获取所有部门信息
-						// pageNum:this.pageNum,
-						// pageSize:this.pageSize
+					params: {
+						pageNum: this.pageNum,
+						pageSize: this.pageSize
 					}
 				}).then((result) => {
 					this.deptList = result.data.data;
@@ -319,12 +364,13 @@
 			},
 			//页码改变（点击页码之后，newPageNum就会产生新的值）
 			currentChange: function(newPageNum) {
-				this.pageNum = newPageNum;
+				// this.pageNum = newPageNum;
+				this.searchFormData.pageNum = newPageNum;
 				this.getUsersByPage();
 			},
 			//页码对应的数据的改变
 			sizeChange: function(newPageSize) {
-				this.pageSize = newPageSize;
+				this.searchFormData.pageSize = newPageSize
 				this.getUsersByPage();
 			},
 			//性别的格式化
@@ -386,7 +432,7 @@
 					//表单的数据格式都是正确的
 					if (valid) {
 						axios({
-							url: "/app/user/addUser.do",
+							url: "/ship/user/addUsers.do",
 							method: "POST",
 							params: this.addUserFormData
 						}).then((result) => {
@@ -424,10 +470,9 @@
 					//勾选了记录之后，提示用户是否要确认删除,在then（）方法里面完成删除功能
 					this.$confirm("你确定要删除这些记录吗?", "温馨提示").then(() => {
 						axios({
-							url: "/app/user/cutManyUser.do",
+							url: "/ship/user/cutManyUser.do",
 							method: "POST",
 							params: {
-								/* 1，2，3，4，5，6    delete   in (1,2,3,4)*/
 								id: this.delIdArray.join(",")
 							}
 						}).then((result) => {
@@ -449,9 +494,9 @@
 									type: "danger"
 								})
 							}
+						}).catch(() => {
+							console.log("取消")
 						})
-					}).catch(() => {
-						console.log("取消")
 					})
 				}
 			},
@@ -460,7 +505,7 @@
 				let id = row.id;
 				this.$confirm("你确定要删除本条记录吗?", "温馨提示").then(() => {
 					axios({
-						url: "/app/user/cutOneUser.do",
+						url: "/ship/user/cutOneUser.do",
 						method: "POST",
 						params: {
 							id: id
@@ -474,7 +519,7 @@
 							//添加成功使用通知来显示
 							this.$notify({
 								title: "温馨提示",
-								message: "成功的删除了一条记录!",
+								message: "成功删除一条记录。",
 								type: "success"
 							})
 						} else {
@@ -485,9 +530,9 @@
 								type: "danger"
 							})
 						}
+					}).catch(() => {
+
 					})
-				}).catch(()=>{
-					
 				})
 			},
 			//修改
@@ -513,7 +558,7 @@
 					//数据格式都正确
 					if (valid) {
 						axios({
-							url: "/app/user/editUser.do",
+							url: "/ship/user/editUser.do",
 							method: "POST",
 							params: this.editUserFormData
 						}).then((result) => {
@@ -532,17 +577,40 @@
 								let msg = result.data.msg;
 								this.$notify({
 									title: "温馨提示",
-									message: msg,
+									message: msg + ",修改失败!",
 									type: "danger"
 								})
 							}
 						})
 					}
 				});
+			},
+			//多条件搜索
+			searchUsers: function() {
+				axios({
+					url: "/ship/user/getUsersBySearch.do",
+					method: "POST",
+					//params里面没有传递pageNum和pageSize
+					params: this.searchFormData
+				}).then((result) => {
+					let code = result.data.code;
+					if (code == 200) {
+						this.userList = result.data.data;
+						this.pageNum = 1;
+						this.pageSize = 10;
+						this.total = result.data.total;
+					} else {
+						let msg = result.data.msg;
+						this.$notify({
+							title: "温馨提示",
+							message: msg,
+							type: "danger"
+						})
+					}
+				})
 			}
 		}
 	}
 </script>
-
 <style scoped>
 </style>

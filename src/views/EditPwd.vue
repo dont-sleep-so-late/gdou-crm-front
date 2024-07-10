@@ -39,11 +39,11 @@
 				}
 			}
 		},
-		created(){
+		created() {
 			let userJson = window.localStorage.getItem("user");
 			let user = JSON.parse(userJson);
 			console.log(user.username)
-			this.formData.username=user.username;
+			this.formData.username = user.username;
 		},
 		methods: {
 			//取消
@@ -56,10 +56,10 @@
 					//数据格式正确
 					if (valid) {
 						axios({
-							url: "/app/account/editAccountPwd.do",
+							url: "/ship/account/editAccountPwd.do",
 							method: "POST",
 							params: {
-								newPwd:this.formData.pwd
+								newPwd: this.formData.pwd
 							}
 						}).then((result) => {
 							let code = result.data.code;

@@ -77,7 +77,7 @@
 						placeholder="请输入名称"></el-input>
 				</el-form-item>
 				<el-form-item prop="status" label="状态" label-width="60px">
-					
+
 					<el-select placeholder="请选择状态" v-model="addShipFormData.status">
 						<el-option v-for="(item,index) in statusList" :label="stafmt(item)" :value="item"></el-option>
 					</el-select>
@@ -207,7 +207,7 @@
 				/* 船员信息弹窗 */
 				userWinOpenStatus: false,
 				editShipFormData: {
-					id:undefined,
+					id: undefined,
 					num: undefined,
 					name: undefined,
 					status: undefined,
@@ -275,7 +275,7 @@
 			//方法调用方法
 			getShipsBySearch: function() {
 				this.axios({
-					url: "/app/ship/getShipsBySearch.do",
+					url: "/ship/ships/getShipsBySearch.do",
 					method: "POST",
 					params: {
 						num: this.searchFormData.num,
@@ -327,7 +327,7 @@
 			//点击添加之后弹出框里面的取消功能
 			addShipCancel: function() {
 				this.$refs['addWinRef'].resetFields();
-				this.addWinOpenStatus=false;
+				this.addWinOpenStatus = false;
 			},
 			//点击添加之后弹出框里面的确定功能
 			addShipOk: function() {
@@ -336,7 +336,7 @@
 					//表单的数据格式都是正确的
 					if (valid) {
 						axios({
-							url: "/app/ship/addShip.do",
+							url: "/ship/ships/addShip.do",
 							method: "POST",
 							params: this.addShipFormData
 						}).then((result) => {
@@ -374,7 +374,7 @@
 					//勾选了记录之后，提示用户是否要确认删除,在then（）方法里面完成删除功能
 					this.$confirm("你确定要删除这些记录吗?", "温馨提示").then(() => {
 						axios({
-							url: "/app/ship/cutMany.do",
+							url: "/ship/ships/cutMany.do",
 							method: "POST",
 							params: {
 								/* 1，2，3，4，5，6    delete   in (1,2,3,4)*/
@@ -410,7 +410,7 @@
 				let id = row.id;
 				this.$confirm("你确定要删除本条记录吗?", "温馨提示").then(() => {
 					axios({
-						url: "/app/ship/cutOne.do",
+						url: "/ship/ships/cutOne.do",
 						method: "POST",
 						params: {
 							id: id
@@ -452,7 +452,7 @@
 			/* 船员信息 */
 			openUsersWin: function(id) {
 				this.axios({
-					url: "/app/ship/getShipUserList.do",
+					url: "/ship/ships/getShipUserList.do",
 					method: "GET",
 					params: {
 						id: id
@@ -479,7 +479,7 @@
 					//数据格式都正确
 					if (valid) {
 						this.axios({
-							url: "/app/ship/editShip.do",
+							url: "/ship/ships/editShip.do",
 							method: "POST",
 							params: this.editShipFormData
 						}).then((result) => {
