@@ -39,8 +39,8 @@ new Vue({
         this.getDeptsByPage();
     },
     methods:{
-        getDeptsByPage:function(){
-            axios({
+        getDeptsByPage:async function(){
+            await axios({
                 url:"/dept/getDeptsByPage.do",
                 method:"POST",
                 params:{
@@ -79,40 +79,40 @@ new Vue({
         addDeptOk:function(){
             //点击确定按钮之前，要先确保输入的数据格式都是正确的（要进行数据校验）
             //valid表示数据校验的结果
-            this.$refs['addDeptWinRef'].validate((valid)=>{
-                //数据格式都正确
-                if(valid){
-                    axios({
-                        url:"/dept/addDepts.do",
-                        method:"POST",
-                        /*params:{
+            this.$refs["addDeptWinRef"].validate(async  (valid) => {
+              //数据格式都正确
+              if (valid) {
+                await axios({
+                  url: "/dept/addDepts.do",
+                  method: "POST",
+                  /*params:{
                             name:this.addDeptFormData.name,
                             loc:this.addDeptFormData.loc
                         }*/
-                        params:this.addDeptFormData
-                    }).then((result)=>{
-                        let code = result.data.code;
-                        if(code == 200){
-                            //关闭弹出框
-                            this.addDeptWinOpenStatus = false;
-                            //刷新列表数据
-                            this.getDeptsByPage();
-                            //显示成功通知
-                            this.$notify({
-                                title:"温馨提示",
-                                message:"添加成功!",
-                                type:"success"
-                            });
-                        } else {
-                            //添加失败的通知
-                            this.$notify({
-                                title:"温馨提示",
-                                message:result.data.msg + ",添加失败!",
-                                type:"danger"
-                            });
-                        }
+                  params: this.addDeptFormData,
+                }).then((result) => {
+                  let code = result.data.code;
+                  if (code == 200) {
+                    //关闭弹出框
+                    this.addDeptWinOpenStatus = false;
+                    //刷新列表数据
+                    this.getDeptsByPage();
+                    //显示成功通知
+                    this.$notify({
+                      title: "温馨提示",
+                      message: "添加成功!",
+                      type: "success",
                     });
-                }
+                  } else {
+                    //添加失败的通知
+                    this.$notify({
+                      title: "温馨提示",
+                      message: result.data.msg + ",添加失败!",
+                      type: "danger",
+                    });
+                  }
+                });
+              }
             });
         }
     }
