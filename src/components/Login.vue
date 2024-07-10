@@ -82,39 +82,48 @@ export default {
 	},
 	methods: {
 		getEmailCode() {
-			this.axios({
-				url: "/ship/email/send.do",
-				method: "POST",
-				params: {
-					username: this.FormData.username,
-					email: this.FormData.email,
-				}
-			}).then((result) => {
-				console.log(result);
-				if (result.data.code == -1) {
-					// alert(result.data.msg)
+			//通过正则表达式校验邮箱
+			const reg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((\.[a-zA-Z0-9_-]{2,3}){1,2})$/;
+			if (reg.test(this.FormData.email)) {
+				this.axios({
+					url: "/ship/email/send.do",
+					method: "POST",
+					params: {
+						username: this.FormData.username,
+						email: this.FormData.email,
+					}
+				}).then((result) => {
+					if (result.data.code == -1) {
+						// alert(result.data.msg)
+						this.$notify({
+							title: "温馨提示",
+							message: result.data.msg,
+							type: "error",
+							customClass: "center_log"
+						})
+					} else {
+						// alert("请查看邮箱")
+						this.$notify({
+							title: "温馨提示",
+							message: "请查看邮箱",
+							type: "success"
+						})
+					}
+				}).catch((result) => {
+					// alert("请求失败");
 					this.$notify({
 						title: "温馨提示",
-						message: result.data.msg,
-						type: "error",
-						customClass: "center_log"
+						message: "请求失败",
+						type: "danger"
 					})
-				} else {
-					// alert("请查看邮箱")
-					this.$notify({
-						title: "温馨提示",
-						message: "请查看邮箱",
-						type: "success"
-					})
-				}
-			}).catch((result) => {
-				// alert("请求失败");
+				});
+			} else {
 				this.$notify({
 					title: "温馨提示",
-					message: "请求失败",
-					type: "danger"
+					message: '请输入正确的邮箱',
+					type: "error",
 				})
-			});
+			}
 		},
 		cleanInput() {
 			this.$refs.FormData.resetFields();
@@ -251,19 +260,25 @@ export default {
 }
 
 .form-items {
-	padding: 140px 200px;
+	padding: 80px 200px;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
 	align-content: center;
+
+
 }
 
-
-.loginClassFlag {
-	padding: 70px 200px;
+.form-items .captchaBox {
+	width: 100%;
+	display: flex;
+	justify-content: space-between;
 }
 
-
+.form-items .captchaBox>.el-input {
+	width: 400px;
+	margin-right: 60px;
+}
 
 .form-items .el-button {
 	width: 195px;
