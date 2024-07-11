@@ -43,7 +43,7 @@
 								<span slot="title">部门管理</span>
 							</el-menu-item>
 							<el-menu-item index="getSearchs" id="6" @click="getSearchs()">
-								<i class="el-icon-setting"></i>
+								<i class="el-icon-search"></i>
 								<span slot="title">搜索管理</span>
 							</el-menu-item>
 							<el-menu-item index="getShips" id="7" @click="getShips()">
@@ -51,7 +51,7 @@
 								<span slot="title">船舶管理</span>
 							</el-menu-item>
 							<el-menu-item index="echars" id="8" @click="echars()">
-								<i class="el-icon-setting"></i>
+								<i class="el-icon-pie-chart"></i>
 								<span slot="title">报表管理</span>
 							</el-menu-item>
 						</el-menu>
