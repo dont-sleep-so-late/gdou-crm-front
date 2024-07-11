@@ -470,6 +470,7 @@ export default {
 		},
 		//弹出框里面取消的功能
 		editUserCancel: function () {
+			this.editWinOpenStatus = !this.editWinOpenStatus;
 			this.$refs['editWinRef'].resetFields();
 		},
 		//弹出框里面确定的功能
