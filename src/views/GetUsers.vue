@@ -347,8 +347,8 @@ export default {
 		},
 		//查询部门记录
 		//在客户管理功能里面调用部门管理的接口
-		getAllDepts: function () {
-			axios({
+		getAllDepts: async function () {
+			await axios({
 				url: "/ship/dept/getAllDepts.do",
 				method: "POST",
 				params: {
@@ -426,10 +426,10 @@ export default {
 		//点击添加之后弹出框里面的确定功能
 		addUserOk: function () {
 			//点击确定按钮之前，要先做数据的输入校验
-			this.$refs['addWinRef'].validate((valid) => {
+			this.$refs['addWinRef'].validate(async (valid) => {
 				//表单的数据格式都是正确的
 				if (valid) {
-					axios({
+					await axios({
 						url: "/ship/user/addUsers.do",
 						method: "POST",
 						params: this.addUserFormData
@@ -466,8 +466,8 @@ export default {
 				this.$alert("请至少选中一条记录!", "温馨提示");
 			} else {
 				//勾选了记录之后，提示用户是否要确认删除,在then（）方法里面完成删除功能
-				this.$confirm("你确定要删除这些记录吗?", "温馨提示").then(() => {
-					axios({
+				this.$confirm("你确定要删除这些记录吗?", "温馨提示").then(async () => {
+					await axios({
 						url: "/ship/user/cutManyUser.do",
 						method: "POST",
 						params: {
@@ -501,8 +501,8 @@ export default {
 		//单个删除
 		delOne: function (row) {
 			let id = row.id;
-			this.$confirm("你确定要删除本条记录吗?", "温馨提示").then(() => {
-				axios({
+			this.$confirm("你确定要删除本条记录吗?", "温馨提示").then(async () => {
+				await axios({
 					url: "/ship/user/cutOneUser.do",
 					method: "POST",
 					params: {
@@ -553,10 +553,10 @@ export default {
 		},
 		//弹出框里面确定的功能
 		editUserOk: function () {
-			this.$refs['editWinRef'].validate((valid) => {
+			this.$refs['editWinRef'].validate(async (valid) => {
 				//数据格式都正确
 				if (valid) {
-					axios({
+					await axios({
 						url: "/ship/user/editUser.do",
 						method: "POST",
 						params: this.editUserFormData
@@ -585,8 +585,8 @@ export default {
 			});
 		},
 		//多条件搜索
-		searchUsers: function () {
-			axios({
+		searchUsers: async function () {
+			await axios({
 				url: "/ship/user/getUsersBySearch.do",
 				method: "POST",
 				//params里面没有传递pageNum和pageSize

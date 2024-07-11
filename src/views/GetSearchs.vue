@@ -125,8 +125,8 @@ export default {
 		},
 		//查询部门记录
 		//在客户管理功能里面调用部门管理的接口
-		getAllDepts: function () {
-			axios({
+		getAllDepts: async function () {
+			await axios({
 				url: "/ship/dept/getAllDepts.do",
 				method: "POST",
 				params: {

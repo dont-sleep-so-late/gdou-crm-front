@@ -81,11 +81,11 @@ export default {
 		}
 	},
 	methods: {
-		getEmailCode() {
+		async getEmailCode() {
 			//通过正则表达式校验邮箱
 			const reg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((\.[a-zA-Z0-9_-]{2,3}){1,2})$/;
 			if (reg.test(this.FormData.email)) {
-				this.axios({
+				await this.axios({
 					url: "/ship/email/send.do",
 					method: "POST",
 					params: {
@@ -131,7 +131,7 @@ export default {
 		login() {
 			this.$refs.FormData.validate(async (valid) => {
 				if (valid) {
-					this.axios({
+					await this.axios({
 						url: "/ship/account/login.do",
 						method: "POST",
 						//传参  /account/getLogin.do?username=...&pwd=...&captcha=...

@@ -170,8 +170,8 @@ export default {
 		}
 	},
 	methods: {
-		getDeptsByPage: function () {
-			axios({
+		getDeptsByPage: async function () {
+			await axios({
 				url: "/ship/dept/getDeptsByPage.do",
 				method: "POST",
 				params: {
@@ -213,10 +213,10 @@ export default {
 		addDeptOk: function () {
 			//点击确定按钮之前，要先确保输入的数据格式都是正确的（要进行数据校验）
 			//valid表示数据校验的结果
-			this.$refs['addDeptWinRef'].validate((valid) => {
+			this.$refs['addDeptWinRef'].validate(async (valid) => {
 				//数据格式都正确
 				if (valid) {
-					axios({
+					await axios({
 						url: "/ship/dept/addDepts.do",
 						method: "POST",
 						/*params:{
@@ -270,10 +270,10 @@ export default {
 		},
 		//弹出框里面确定的功能
 		editDeptOk: function () {
-			this.$refs['editDeptWinRef'].validate((valid) => {
+			this.$refs['editDeptWinRef'].validate(async (valid) => {
 				//数据格式都正确
 				if (valid) {
-					this.axios({
+					await this.axios({
 						url: "/ship/dept/editDept.do",
 						method: "POST",
 						params: this.editDeptFormData
@@ -326,8 +326,8 @@ export default {
 				this.$alert("请至少选中一条记录!", "温馨提示");
 			} else {
 				//勾选了记录之后，提示用户是否要确认删除,在then（）方法里面完成删除功能
-				this.$confirm("你确定要删除这些记录吗?", "温馨提示").then(() => {
-					axios({
+				this.$confirm("你确定要删除这些记录吗?", "温馨提示").then(async () => {
+					await axios({
 						url: "/ship/dept/cutManyDept.do",
 						method: "POST",
 						params: {
@@ -363,8 +363,8 @@ export default {
 		//单个删除
 		delOne: function (row) {
 			let id = row.id;
-			this.$confirm("你确定要删除本条记录吗?", "温馨提示").then(() => {
-				axios({
+			this.$confirm("你确定要删除本条记录吗?", "温馨提示").then(async () => {
+				await axios({
 					url: "/ship/dept/cutOneDept.do",
 					method: "POST",
 					params: {
@@ -397,8 +397,8 @@ export default {
 			})
 		},
 		//方法调用方法
-		getDeptsBySearch: function () {
-			this.axios({
+		getDeptsBySearch: async function () {
+			await this.axios({
 				url: "/ship/dept/getDeptsBySearch.do",
 				method: "POST",
 				params: {

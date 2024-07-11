@@ -85,8 +85,8 @@ new Vue({
     },
     methods:{
         //方法调用方法
-        getUsersByPage:function(){
-            axios({
+        getUsersByPage:async function(){
+            await axios({
                 url:"/user/getUsersByPage.do",
                 method:"POST",
                 params:{
@@ -100,8 +100,8 @@ new Vue({
         },
         //查询部门记录
         //在客户管理功能里面调用部门管理的接口
-        getAllDepts:function(){
-            axios({
+        getAllDepts:async function(){
+            await axios({
                 url:"/dept/getDeptsByPage.do",
                 method:"POST",
                 params:{
@@ -177,36 +177,36 @@ new Vue({
         //点击添加之后弹出框里面的确定功能
         addUserOk:function(){
             //点击确定按钮之前，要先做数据的输入校验
-            this.$refs['addWinRef'].validate((valid)=>{
-                //表单的数据格式都是正确的
-                if(valid){
-                    axios({
-                        url:"/user/addUsers.do",
-                        method:"POST",
-                        params:this.addUserFormData
-                    }).then((result)=>{
-                        let code = result.data.code;
-                        if(code == 200){
-                            //关闭弹出框
-                            this.addWinOpenStatus = false;
-                            //刷新数据
-                            this.getUsersByPage();
-                            //添加成功使用通知来显示
-                            this.$notify({
-                                title:"温馨提示",
-                                message:"成功的添加了一条记录!",
-                                type:"success"
-                            })
-                        } else {
-                            let msg = result.data.msg;
-                            this.$notify({
-                                title:"温馨提示",
-                                message:msg + ",添加失败!",
-                                type:"danger"
-                            })
-                        }
+            this.$refs["addWinRef"].validate(async  (valid) => {
+              //表单的数据格式都是正确的
+              if (valid) {
+                await axios({
+                  url: "/user/addUsers.do",
+                  method: "POST",
+                  params: this.addUserFormData,
+                }).then((result) => {
+                  let code = result.data.code;
+                  if (code == 200) {
+                    //关闭弹出框
+                    this.addWinOpenStatus = false;
+                    //刷新数据
+                    this.getUsersByPage();
+                    //添加成功使用通知来显示
+                    this.$notify({
+                      title: "温馨提示",
+                      message: "成功的添加了一条记录!",
+                      type: "success",
                     });
-                }
+                  } else {
+                    let msg = result.data.msg;
+                    this.$notify({
+                      title: "温馨提示",
+                      message: msg + ",添加失败!",
+                      type: "danger",
+                    });
+                  }
+                });
+              }
             });
         },
         //批量删除
@@ -217,68 +217,72 @@ new Vue({
                 this.$alert("请至少选中一条记录!","温馨提示");
             } else {
                 //勾选了记录之后，提示用户是否要确认删除,在then（）方法里面完成删除功能
-                this.$confirm("你确定要删除这些记录吗?","温馨提示").then(()=>{
-                    axios({
-                        url:"/user/cutManyUser.do",
-                        method:"POST",
-                        params:{
-                            id:this.delIdArray.join(",")
-                        }
-                    }).then((result)=>{
-                        let code = result.data.code;
-                        if(code == 200){
-                            //刷新数据
-                            this.getUsersByPage();
-                            //添加成功使用通知来显示
-                            this.$notify({
-                                title:"温馨提示",
-                                message:"成功的删除了一批记录!",
-                                type:"success"
-                            })
-                        } else {
-                            let msg = result.data.msg;
-                            this.$notify({
-                                title:"温馨提示",
-                                message:msg + ",删除失败!",
-                                type:"danger"
-                            })
-                        }
-                    })
-                })
+                this.$confirm("你确定要删除这些记录吗?", "温馨提示").then(
+                  async () => {
+                    await axios({
+                      url: "/user/cutManyUser.do",
+                      method: "POST",
+                      params: {
+                        id: this.delIdArray.join(","),
+                      },
+                    }).then((result) => {
+                      let code = result.data.code;
+                      if (code == 200) {
+                        //刷新数据
+                        this.getUsersByPage();
+                        //添加成功使用通知来显示
+                        this.$notify({
+                          title: "温馨提示",
+                          message: "成功的删除了一批记录!",
+                          type: "success",
+                        });
+                      } else {
+                        let msg = result.data.msg;
+                        this.$notify({
+                          title: "温馨提示",
+                          message: msg + ",删除失败!",
+                          type: "danger",
+                        });
+                      }
+                    });
+                  }
+                );
             }
         },
         //单个删除
         delOne:function(row){
             let id = row.id;
-            this.$confirm("你确定要删除本条记录吗?","温馨提示").then(()=>{
-                axios({
-                    url:"/user/cutOneUser.do",
-                    method:"POST",
-                    params:{
-                        id:id
-                    }
-                }).then((result)=>{
-                    console.log(result);
-                    let code = result.data.code;
-                    if(code == 200){
-                        //刷新数据
-                        this.getUsersByPage();
-                        //添加成功使用通知来显示
-                        this.$notify({
-                            title:"温馨提示",
-                            message:"成功的删除了一条记录!",
-                            type:"success"
-                        })
-                    } else {
-                        let msg = result.data.msg;
-                        this.$notify({
-                            title:"温馨提示",
-                            message:msg + ",删除失败!",
-                            type:"danger"
-                        })
-                    }
-                })
-            })
+            this.$confirm("你确定要删除本条记录吗?", "温馨提示").then(
+              async () => {
+                await axios({
+                  url: "/user/cutOneUser.do",
+                  method: "POST",
+                  params: {
+                    id: id,
+                  },
+                }).then((result) => {
+                  console.log(result);
+                  let code = result.data.code;
+                  if (code == 200) {
+                    //刷新数据
+                    this.getUsersByPage();
+                    //添加成功使用通知来显示
+                    this.$notify({
+                      title: "温馨提示",
+                      message: "成功的删除了一条记录!",
+                      type: "success",
+                    });
+                  } else {
+                    let msg = result.data.msg;
+                    this.$notify({
+                      title: "温馨提示",
+                      message: msg + ",删除失败!",
+                      type: "danger",
+                    });
+                  }
+                });
+              }
+            );
         },
         //修改
         //点击修改按钮之后，显示弹出框
@@ -299,35 +303,35 @@ new Vue({
         },
         //弹出框里面确定的功能
         editUserOk:function(){
-            this.$refs['editWinRef'].validate((valid)=>{
-                //数据格式都正确
-                if(valid){
-                    axios({
-                        url:"/user/editUser.do",
-                        method:"POST",
-                        params:this.editUserFormData
-                    }).then((result)=>{
-                        let code = result.data.code;
-                        if(code == 200){
-                            this.editWinOpenStatus = false;
-                                //刷新数据
-                            this.getUsersByPage();
-                            //添加成功使用通知来显示
-                            this.$notify({
-                                title:"温馨提示",
-                                message:"成功的修改了一条记录!",
-                                type:"success"
-                            })
-                        } else {
-                            let msg = result.data.msg;
-                            this.$notify({
-                                title:"温馨提示",
-                                message:msg + ",修改失败!",
-                                type:"danger"
-                            })
-                        }
-                    })
-                }
+            this.$refs["editWinRef"].validate(async (valid) => {
+              //数据格式都正确
+              if (valid) {
+                await axios({
+                  url: "/user/editUser.do",
+                  method: "POST",
+                  params: this.editUserFormData,
+                }).then((result) => {
+                  let code = result.data.code;
+                  if (code == 200) {
+                    this.editWinOpenStatus = false;
+                    //刷新数据
+                    this.getUsersByPage();
+                    //添加成功使用通知来显示
+                    this.$notify({
+                      title: "温馨提示",
+                      message: "成功的修改了一条记录!",
+                      type: "success",
+                    });
+                  } else {
+                    let msg = result.data.msg;
+                    this.$notify({
+                      title: "温馨提示",
+                      message: msg + ",修改失败!",
+                      type: "danger",
+                    });
+                  }
+                });
+              }
             });
         }
     }

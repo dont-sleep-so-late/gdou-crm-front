@@ -127,8 +127,8 @@ export default {
 		}
 	},
 	methods: {
-		getAccountsByPage: function () {
-			axios({
+		getAccountsByPage: async function () {
+			await axios({
 				url: "/ship/account/getAccountsByPage.do",
 				method: "POST",
 				params: {
@@ -159,8 +159,8 @@ export default {
 			this.getAccountsByPage();
 		},
 		//启用和禁用
-		switchChange: function (row) {
-			axios({
+		switchChange: async function (row) {
+			await axios({
 				url: "/ship/account/editAccountStatus.do",
 				method: "POST",
 				params: {
@@ -202,10 +202,10 @@ export default {
 		},
 		//弹出框里面的确定功能
 		addAccountOk: function () {
-			this.$refs['addAccountWinRef'].validate((valid) => {
+			this.$refs['addAccountWinRef'].validate(async (valid) => {
 				//数据格式正确
 				if (valid) {
-					axios({
+					await axios({
 						url: "/ship/account/addAccount.do",
 						method: "POST",
 						params: this.addAccountFormData
@@ -237,8 +237,8 @@ export default {
 		delOneAccount: function (row) {
 			//获取被删除数据的id
 			let id = row.id;
-			this.$confirm("你确定要删除本条记录吗?", "温馨提示").then(() => {
-				axios({
+			this.$confirm("你确定要删除本条记录吗?", "温馨提示").then(async () => {
+				await axios({
 					url: "/ship/account/cutOneAccount.do",
 					method: "POST",
 					params: {
@@ -269,8 +269,8 @@ export default {
 		},
 		//重置密码
 		resetAccountPwd: function (row) {
-			this.$confirm("你确定要重置当前这条记录吗?", "温馨提示").then(() => {
-				axios({
+			this.$confirm("你确定要重置当前这条记录吗?", "温馨提示").then(async () => {
+				await axios({
 					url: "/ship/account/editResetAccountPwd.do",
 					method: "POST",
 					params: {

@@ -86,8 +86,8 @@ export default {
 		this.username=user.username
 	}, */
 	methods: {
-		logout() {
-			this.axios({
+		async logout() {
+			await this.axios({
 				url: "/ship/account/logout.do",
 				method: "POST",
 				params: {}
