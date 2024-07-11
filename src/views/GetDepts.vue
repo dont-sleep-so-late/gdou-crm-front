@@ -3,7 +3,7 @@
 		<!--顶部工具栏：添加  只有超级管理员可以查看-->
 		<el-row>
 			<el-col :span="4">
-				<el-button type="success" icon="el-icon-plus" round size="small" @click="openAddDeptWin">添加</el-button>
+				<el-button type="primary" icon="el-icon-plus" size="small" @click="openAddDeptWin">添加</el-button>
 				<el-button type="danger" icon="el-icon-delete" size="small" @click="delMany">批量删除</el-button>
 			</el-col>
 			<el-col :span="20">
@@ -35,7 +35,7 @@
 			<el-table-column label="操作" align="center">
 				<template slot-scope="scope">
 					<div>
-						<el-button type="success" icon="el-icon-edit" size="mini"
+						<el-button type="primary" icon="el-icon-edit" size="mini"
 							@click="openEditWin(scope.row)">编辑</el-button>
 						<el-button type="danger" icon="el-icon-delete" size="mini"
 							@click="delOne(scope.row)">删除</el-button>
@@ -61,7 +61,7 @@
 				</el-form-item>
 				<el-form-item>
 					<el-button type="primary" icon="el-icon-check" @click="addDeptOk">确定</el-button>
-					<el-button type="danger" icon="el-icon-close" @click="resetAddDeptWin">清除</el-button>
+					<el-button type="danger" icon="el-icon-close" @click="resetAddDeptWin">取消</el-button>
 				</el-form-item>
 			</el-form>
 		</el-dialog>
@@ -201,6 +201,7 @@ export default {
 		},
 		//点击添加按钮之后弹出框里面的取消功能
 		resetAddDeptWin: function () {
+			this.addDeptWinOpenStatus = !this.addDeptWinOpenStatus;
 			this.$refs['addDeptWinRef'].resetFields();
 		},
 		//点击添加按钮，出现弹出框
@@ -264,6 +265,7 @@ export default {
 		},
 		//弹出框里面取消的功能
 		editDeptCancel: function () {
+			this.editWinOpenStatus = !this.editWinOpenStatus;
 			this.$refs['editDeptWinRef'].resetFields();
 		},
 		//弹出框里面确定的功能
