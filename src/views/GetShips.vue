@@ -97,7 +97,7 @@
 			<el-form :rules="formRules" :model="editShipFormData" ref="editWinRef">
 				<el-form-item prop="num" label="编号" label-width="60px">
 					<el-input v-model="editShipFormData.num" prefix-icon="el-icon-user"
-						placeholder="长度为2-10位简体中文"></el-input>
+						placeholder="长度为2-10位数字"></el-input>
 				</el-form-item>
 				<el-form-item prop="name" label="名称" label-width="60px">
 					<el-input v-model="editShipFormData.name" prefix-icon="el-icon-mobile-more"
@@ -173,7 +173,7 @@ export default {
 				{
 					min: 2,
 					max: 10,
-					message: "船舶编号为2-10位的简体中文!",
+					message: "船舶编号为2-10位的数字!",
 					trigger: "blur"
 				}
 				],

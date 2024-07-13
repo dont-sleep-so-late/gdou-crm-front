@@ -18,8 +18,9 @@
 					</el-form-item>
 					<el-form-item>
 						<el-select placeholder="请选择部门" v-model="searchFormData.deptName">
-							<el-option v-for="(item, index) in deptList" :label="item.name"
-								:value="item.name"></el-option>
+							<el-option label="取消" value=""></el-option>
+							<el-option v-for="(item, index) in deptList" :label="item.name" :value="item.name"
+								:key="index"></el-option>
 						</el-select>
 					</el-form-item>
 
@@ -31,7 +32,7 @@
 						</el-radio-group>
 					</el-form-item>
 					<el-form-item>
-						<el-button type="primary" icon="el-icon-search" @click="searchUsers">搜索</el-button>
+						<el-button type="primary" icon="el-icon-search" @click="searchUsers()">搜索</el-button>
 					</el-form-item>
 				</el-form>
 			</el-col>
@@ -126,7 +127,16 @@
 					<el-select v-model="addUserFormData.deptId" placeholder="请选择部门">
 						<!--:label表示职员下拉之后能看到数据-->
 						<!--:value表示下拉之后职员选择了一个部门-->
-						<el-option v-for="(item) in deptList" :label="item.name" :value="item.id"></el-option>
+						<el-option v-for="(item) in deptList" :label="item.name" :value="item.id"
+							:key="item.id"></el-option>
+					</el-select>
+				</el-form-item>
+				<el-form-item prop="shipId" label="船舶" label-width="60px">
+					<el-select v-model="addUserFormData.shipId" placeholder="请选择船舶">
+						<!--:label表示职员下拉之后能看到数据-->
+						<!--:value表示下拉之后职员选择了一个部门-->
+						<el-option v-for="(item) in shipList" :label="item.name" :value="item.id"
+							:key="item.id"></el-option>
 					</el-select>
 				</el-form-item>
 				<el-form-item label="" label-width="60px">
@@ -178,7 +188,14 @@
 				</el-form-item>
 				<el-form-item prop="deptId" label="部门" label-width="60px">
 					<el-select v-model="editUserFormData.deptId" placeholder="请选择部门">
-						<el-option v-for="(item) in deptList" :label="item.name" :value="item.id"></el-option>
+						<el-option v-for="(item) in deptList" :label="item.name" :value="item.id"
+							:key="item.id"></el-option>
+					</el-select>
+				</el-form-item>
+				<el-form-item prop="shipId" label="船舶" label-width="60px">
+					<el-select v-model="editUserFormData.shipId" placeholder="请选择船舶">
+						<el-option v-for="(item) in shipList" :label="item.name" :value="item.id"
+							:key="item.id"></el-option>
 					</el-select>
 				</el-form-item>
 				<el-form-item label="" label-width="60px">
@@ -200,6 +217,8 @@ export default {
 			userList: [],
 			//部门信息列表
 			deptList: [],
+			//船舶部门信息列表
+			shipList: [],
 			//页码
 			pageNum: 1,
 			//每一页显示的数据
@@ -220,7 +239,8 @@ export default {
 				sal: undefined,
 				address: undefined,
 				remark: undefined,
-				deptId: undefined
+				deptId: undefined,
+				shipId: undefined
 			},
 			//表单数据的校验
 			formRules: {
@@ -301,7 +321,8 @@ export default {
 				sal: undefined,
 				address: undefined,
 				remark: undefined,
-				deptId: undefined
+				deptId: undefined,
+				shipId: undefined,
 			},
 			//搜索模块的数据
 			searchFormData: {
@@ -321,12 +342,14 @@ export default {
 		this.getUsersByPage();
 		//查询所有部门记录
 		this.getAllDepts();
+		//查询所有船舶
+		this.getAllShips();
 	},
 	watch: {
 		$route() {
 			this.pageNum = 1;
 			this.pageSize = 10;
-			this.getAccountsByPage();
+			this.getUsersByPage();
 		}
 	},
 	methods: {
@@ -357,6 +380,19 @@ export default {
 				}
 			}).then((result) => {
 				this.deptList = result.data.data;
+			})
+		},
+		//查询船舶记录
+		getAllShips: async function () {
+			await axios({
+				url: "/ship/ships/getAllShip.do",
+				method: "POST",
+				params: {
+					pageNum: this.pageNum,
+					pageSize: this.pageSize
+				}
+			}).then((result) => {
+				this.shipList = result.data.data;
 			})
 		},
 		//页码改变（点击页码之后，newPageNum就会产生新的值）
