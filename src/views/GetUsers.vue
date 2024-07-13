@@ -10,7 +10,7 @@
 				<el-form :inline="true" size="small">
 					<el-form-item>
 						<el-input v-model="searchFormData.username" prefix-icon="el-icon-user"
-							placeholder="请输入客户姓名"></el-input>
+							placeholder="请输入职员姓名"></el-input>
 					</el-form-item>
 					<el-form-item>
 						<el-input v-model="searchFormData.tel" prefix-icon="el-icon-mobile-phone"
@@ -47,7 +47,7 @@
 			<el-table-column label="序号" align="center" type="index"></el-table-column>
 			<!--prop属性表示该值来至于数据库表里面的字段-->
 			<el-table-column label="主键" align="center" prop="id"></el-table-column>
-			<el-table-column label="客户姓名" align="center" prop="username"></el-table-column>
+			<el-table-column label="职员姓名" align="center" prop="username"></el-table-column>
 			<el-table-column label="生日" align="center" prop="birthday"></el-table-column>
 			<!--使用formatter来对表里面的数据进行格式化处理-->
 			<el-table-column label="性别" align="center" prop="sex" :formatter="sexFmt"></el-table-column>
@@ -83,7 +83,7 @@
 		</el-pagination>
 
 		<!--添加弹窗-->
-		<el-dialog :visible.sync="addWinOpenStatus" title="添加客户信息" @close="addWinClose">
+		<el-dialog :visible.sync="addWinOpenStatus" title="添加职员信息" @close="addWinClose">
 			<el-form :rules="formRules" :model="addUserFormData" ref="addWinRef">
 				<el-form-item prop="username" label="姓名" label-width="60px">
 					<el-input v-model="addUserFormData.username" prefix-icon="el-icon-user"
@@ -124,8 +124,8 @@
 				</el-form-item>
 				<el-form-item prop="deptId" label="部门" label-width="60px">
 					<el-select v-model="addUserFormData.deptId" placeholder="请选择部门">
-						<!--:label表示客户下拉之后能看到数据-->
-						<!--:value表示下拉之后客户选择了一个部门-->
+						<!--:label表示职员下拉之后能看到数据-->
+						<!--:value表示下拉之后职员选择了一个部门-->
 						<el-option v-for="(item) in deptList" :label="item.name" :value="item.id"></el-option>
 					</el-select>
 				</el-form-item>
@@ -137,7 +137,7 @@
 		</el-dialog>
 
 		<!--编辑弹窗-->
-		<el-dialog :visible.sync="editWinOpenStatus" title="编辑客户信息" @close="editWinClose">
+		<el-dialog :visible.sync="editWinOpenStatus" title="编辑职员信息" @close="editWinClose">
 			<el-form :rules="formRules" :model="editUserFormData" ref="editWinRef">
 				<el-form-item prop="username" label="姓名" label-width="60px">
 					<el-input v-model="editUserFormData.username" prefix-icon="el-icon-user"
@@ -196,7 +196,7 @@ export default {
 	props: {},
 	data() {
 		return {
-			//客户信息列表
+			//职员信息列表
 			userList: [],
 			//部门信息列表
 			deptList: [],
@@ -208,9 +208,9 @@ export default {
 			total: 0,
 			//选择每页要显示的数据条数
 			pageSizes: [5, 10, 15, 20, 30, 50],
-			//点击客户管理之后，默认弹出框是关闭的
+			//点击职员管理之后，默认弹出框是关闭的
 			addWinOpenStatus: false,
-			//初始化添加客户信息模块的数据
+			//初始化添加职员信息模块的数据
 			addUserFormData: {
 				username: undefined,
 				birthday: undefined,
@@ -226,13 +226,13 @@ export default {
 			formRules: {
 				username: [{
 					required: true,
-					message: "客户姓名必须填写!",
+					message: "职员姓名必须填写!",
 					trigger: "blur"
 				},
 				{
 					min: 2,
 					max: 10,
-					message: "客户姓名为2-10位的简体中文!",
+					message: "职员姓名为2-10位的简体中文!",
 					trigger: "blur"
 				}
 				],
@@ -288,7 +288,7 @@ export default {
 			},
 			//存放批量删除所需要的id数组
 			delIdArray: [],
-			//点击客户管理，修改的弹出框默认是关闭的
+			//点击职员管理，修改的弹出框默认是关闭的
 			editWinOpenStatus: false,
 			//点击修改之后，弹出框的数据使用对象来封装
 			editUserFormData: {
@@ -346,7 +346,7 @@ export default {
 			this.searchUsers();
 		},
 		//查询部门记录
-		//在客户管理功能里面调用部门管理的接口
+		//在职员管理功能里面调用部门管理的接口
 		getAllDepts: async function () {
 			await axios({
 				url: "/ship/dept/getAllDepts.do",

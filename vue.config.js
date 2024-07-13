@@ -6,9 +6,9 @@ module.exports = defineConfig({
   devServer: {
     proxy: {
       "/": {
+        changeOrigin: true,
         // target: "http://8.134.10.8:8090", // 代理目标的基础路径
         target: "http://localhost:8090", // 代理目标的基础路径
-        changeOrigin: true,
       },
     },
   },

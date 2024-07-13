@@ -38,7 +38,7 @@
 		<el-table :data="shipList" border @select-all="selectAll" @select="selectOne">
 			<!--type属性表示该值不是来至于数据库表的字段-->
 			<el-table-column label="复选款" align="center" type="selection"></el-table-column>
-			<el-table-column label="序号" align="center" type="index"></el-table-column>
+			<el-table-column label="序号" width="80px" align="center" type="index"></el-table-column>
 			<!--prop属性表示该值来至于数据库表里面的字段-->
 			<el-table-column label="主键" align="center" prop="id"></el-table-column>
 			<el-table-column label="编号" align="center" prop="num"></el-table-column>
@@ -65,7 +65,7 @@
 		</el-pagination>
 
 		<!--添加弹窗-->
-		<el-dialog :visible.sync="addWinOpenStatus" title="添加客户信息" @close="addWinClose">
+		<el-dialog :visible.sync="addWinOpenStatus" title="添加船舶信息" @close="addWinClose">
 			<el-form :rules="formRules" :model="addShipFormData" ref="addWinRef">
 				<el-form-item prop="num" label="编号" label-width="60px">
 					<el-input v-model="addShipFormData.num" prefix-icon="el-icon-user"
@@ -93,7 +93,7 @@
 		</el-dialog>
 
 		<!--编辑弹窗-->
-		<el-dialog :visible.sync="editWinOpenStatus" title="编辑客户信息" @close="editWinClose">
+		<el-dialog :visible.sync="editWinOpenStatus" title="编辑船舶信息" @close="editWinClose">
 			<el-form :rules="formRules" :model="editShipFormData" ref="editWinRef">
 				<el-form-item prop="num" label="编号" label-width="60px">
 					<el-input v-model="editShipFormData.num" prefix-icon="el-icon-user"
@@ -139,6 +139,7 @@ export default {
 	data() {
 		return {
 			//船舶信息列表
+			deptList: [],
 			shipList: [],
 			statusList: [
 				'0', '1', '2', '3'
@@ -153,7 +154,7 @@ export default {
 			total: 0,
 			//选择每页要显示的数据条数
 			pageSizes: [5, 10, 15, 20, 30, 50],
-			//点击客户管理之后，默认弹出框是关闭的
+			//点击船舶管理之后，默认弹出框是关闭的
 			addWinOpenStatus: false,
 			//初始化添加船舶信息模块的数据
 			addShipFormData: {
@@ -201,7 +202,7 @@ export default {
 			},
 			//存放批量删除所需要的id数组
 			delIdArray: [],
-			//点击客户管理，修改的弹出框默认是关闭的
+			//点击船舶管理，修改的弹出框默认是关闭的
 			editWinOpenStatus: false,
 			/* 船员信息弹窗 */
 			userWinOpenStatus: false,
@@ -449,7 +450,7 @@ export default {
 			this.editShipFormData = Object.assign({}, row);
 		},
 		/* 船员信息 */
-		openUsersWin:async  function (id) {
+		openUsersWin: async function (id) {
 			await this.axios({
 				url: "/ship/ships/getShipUserList.do",
 				method: "GET",
@@ -460,6 +461,20 @@ export default {
 				this.userList = result.data.data
 			})
 			this.userWinOpenStatus = !this.userWinOpenStatus;
+		},
+		//查询部门记录
+		//在职员管理功能里面调用部门管理的接口
+		getAllDepts: async function () {
+			await axios({
+				url: "/ship/dept/getAllDepts.do",
+				method: "POST",
+				params: {
+					pageNum: this.pageNum,
+					pageSize: this.pageSize
+				}
+			}).then((result) => {
+				this.deptList = result.data.data;
+			})
 		},
 		//弹出框里面关闭的功能
 		editWinClose: function () {

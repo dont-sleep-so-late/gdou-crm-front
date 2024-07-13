@@ -172,8 +172,8 @@ export default {
 			return profession;
 		},
 		//多条件搜索
-		searchUsers: function () {
-			axios({
+		searchUsers:async function () {
+			await axios({
 				url: "/ship/user/getUsersBySearch.do",
 				method: "POST",
 				//params里面没有传递pageNum和pageSize

@@ -11,7 +11,7 @@
 					<!--右侧主菜单-->
 					<el-dropdown>
 						<a href="javascript:;">
-							<span class="username">{{ username }}</span>
+							<span class="username">用户： {{ username }}</span>
 							<img id="headImg" style="width: 40px;height: 40px"
 								:src="'/ship/download/downloadImg.do?imgUrl=' + imgUrl">
 						</a>
